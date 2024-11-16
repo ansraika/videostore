@@ -25,7 +25,7 @@ public class VideoService {
     @Value("${video.upload-dir}")
     private String uploadDir;
 
-    public Video uploadVideo(MultipartFile file, String videoName, int lengthInSeconds) throws IOException {
+    public void uploadVideo(MultipartFile file, String videoName, int lengthInSeconds) throws IOException {
         // Validate file size
         log.info("Uploading the video...");
         if (file.getSize() > MAX_SIZE_MB * 1024 * 1024) {
@@ -35,7 +35,7 @@ public class VideoService {
 
         // Validate video length
         if (lengthInSeconds < MIN_LENGTH_SEC || lengthInSeconds > MAX_LENGTH_SEC) {
-            log.info("file time is not between 5 to 15 seconds");
+            log.info("file time is not between 1 to 15 seconds");
             throw new IllegalArgumentException("Video length must be between 5 and 15 seconds");
         }
 
@@ -61,6 +61,46 @@ public class VideoService {
         video.setSizeInMB(file.getSize() / (1024 * 1024)); // convert size to MB
 
         // Save the video entity to the database
-        return videoRepository.save(video);
+        videoRepository.save(video);
     }
+
+
+
+    // Method for trimming the video
+    public void trimVideo(String videoName, int startTrimSec, int endTrimSec) throws IOException {
+        Video video = videoRepository.findByVideoName(videoName)
+                .orElseThrow(() -> new IOException("Video not found with name: " + videoName));
+
+        String originalVideoPath = video.getVideoPath();
+        File originalVideo = new File(originalVideoPath);
+
+        if (!originalVideo.exists()) {
+            throw new IOException("Original video file not found at: " + originalVideoPath);
+        }
+
+        // Calculate the output file path for the trimmed video
+        String trimmedVideoPath = uploadDir + "/trimmed_" + videoName;
+        File trimmedVideo = new File(trimmedVideoPath);
+
+        // Execute FFmpeg command to trim the video
+        String command = String.format("ffmpeg -ss %d -i %s -to %d -c:v libx264 -c:a aac -strict experimental %s",
+                startTrimSec, originalVideoPath, endTrimSec, trimmedVideoPath);
+
+        try {
+            Process process = Runtime.getRuntime().exec(command);
+            process.waitFor();  // Wait for the process to finish
+        } catch (InterruptedException | IOException e) {
+            log.error("Error occurred while trimming the video", e);
+            throw new IOException("Error occurred while trimming the video", e);
+        }
+
+        // Update the video entity with the new trimmed video
+        video.setVideoPath(trimmedVideoPath);
+        video.setLengthInSeconds(endTrimSec - startTrimSec); // Update the video length
+        video.setSizeInMB(trimmedVideo.length() / (1024 * 1024)); // Update the size in MB
+
+        // Save the updated video entity
+        videoRepository.save(video);
+    }
+
 }

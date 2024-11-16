@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 
 
 @RestController
@@ -32,4 +33,26 @@ public class VideoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while uploading the video:"+e.getMessage());
         }
     }
+
+    @PostMapping("/trim")
+    public ResponseEntity<String> trimVideo(@RequestParam String videoName,
+                                            @RequestParam int startTrimSec,
+                                            @RequestParam int endTrimSec) {
+        try {
+            //startTrimSec: the start time in seconds from where to trim the video.
+            //endTrimSec: the end time in seconds where the video should stop
+            // Ensure start and end times are valid
+            if (startTrimSec < 0 || endTrimSec <= startTrimSec) {
+                return new ResponseEntity<>("Invalid time range", HttpStatus.BAD_REQUEST);
+            }
+
+            // Trim the video
+            videoService.trimVideo(videoName, startTrimSec, endTrimSec);
+            return new ResponseEntity<>("Video trimmed successfully!", HttpStatus.OK);
+
+        } catch (IOException e) {
+            return new ResponseEntity<>("Error trimming video: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
