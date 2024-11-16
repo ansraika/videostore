@@ -1,8 +1,10 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Configuration.MergeRequest;
 import com.example.demo.Service.VideoService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
-
+@Slf4j
 @RestController
 @RequestMapping("/api/videos")
 public class VideoController {
@@ -52,6 +55,18 @@ public class VideoController {
 
         } catch (IOException e) {
             return new ResponseEntity<>("Error trimming video: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/merge")
+    public ResponseEntity<String> mergeVideos(@RequestBody MergeRequest mergeRequest) {
+        try {
+            videoService.mergeVideos(mergeRequest.getVideoNames(), mergeRequest.getOutputVideoName());
+            return ResponseEntity.ok("Videos merged successfully.");
+        } catch (IOException e) {
+            log.error("Error merging videos", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error merging videos: " + e.getMessage());
         }
     }
 

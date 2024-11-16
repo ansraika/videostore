@@ -25,7 +25,7 @@ public class Video {
     private String videoPath;
 
     @Min(1)
-    @Max(15)
+    @Max(25)
     private int lengthInSeconds;
 
     @Max(25)
