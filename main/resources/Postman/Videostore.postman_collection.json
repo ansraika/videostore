@@ -1,0 +1,206 @@
+{
+	"info": {
+		"_postman_id": "b6bba948-6ea4-4378-80f0-c1fafe02b939",
+		"name": "Videostore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6772708"
+	},
+	"item": [
+		{
+			"name": "upload",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "sample-token",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "postman-cloud:///1efa4039-ca63-4490-b0a1-9917e45215c2"
+						},
+						{
+							"key": "videoName",
+							"value": "samplevideo2.mp4",
+							"type": "text"
+						},
+						{
+							"key": "lengthInSeconds",
+							"value": "10",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/videos/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"videos",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "trim",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "sample-token",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "videoName",
+							"value": "samplevideo.mp4",
+							"type": "text"
+						},
+						{
+							"key": "startTrimSec",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "endTrimSec",
+							"value": "6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/videos/trim",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"videos",
+						"trim"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "merge",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "sample-token",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"videoNames\": [\"samplevideo2.mp4\", \"samplevideo.mp4\"],\n  \"outputVideoName\": \"merged_video.mp4\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/videos/merge",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"videos",
+						"merge"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "generate-link",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "sample-token",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/videos/generate-link?videoName=samplevideo.mp4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"videos",
+						"generate-link"
+					],
+					"query": [
+						{
+							"key": "videoName",
+							"value": "samplevideo.mp4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "access-link",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "sample-token",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/videos/access-link?token=ec86e52b-46f3-4726-b3db-abf91f32a717",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"videos",
+						"access-link"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "ec86e52b-46f3-4726-b3db-abf91f32a717"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

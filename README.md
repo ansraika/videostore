@@ -152,7 +152,10 @@ The project includes unit tests for video upload, trimming, merging, and the var
    - Ensure that the `video.upload-dir` property in `application.properties` is correctly set. The API expects this directory for video uploads and processing.
 
 2. **Download Postman Collection**:
-   - The Postman collection for testing the API is included in this repo. Download it and import it into your Postman to easily test the API endpoints.
+   - The Postman collection for testing the API is included in this repo. Download it and import it into your Postman to easily test the API endpoints. Postman can be found in : 
+```plaintext
+src/main/resources/Postman/Videostore.postman_collection.json
+```
 
 3. **Download Sample Videos**:
    - Download the sample video files (`samplevideo.mp4` and `samplevideo2.mp4`) that are attached to this repo.
