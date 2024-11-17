@@ -2,6 +2,7 @@ package com.example.demo.Service;
 
 import com.example.demo.Entity.Video;
 import com.example.demo.Repository.VideoRepository;
+import com.example.demo.Response.ShareableLinkResponse;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 
 @Slf4j
@@ -23,6 +25,7 @@ public class VideoService {
     private static final long MAX_SIZE_MB = 25; // max size of video in MB
     private static final int MIN_LENGTH_SEC = 1; // min video length in seconds
     private static final int MAX_LENGTH_SEC = 25; // max video length in seconds
+    private Map<String, Instant> tokenStore = new HashMap<>(); // Temporary in-memory store for tokens
 
     @Value("${video.upload-dir}")
     private String uploadDir;
@@ -176,6 +179,37 @@ public class VideoService {
 
         // Save the merged video in the database
         videoRepository.save(mergedVideo);
+    }
+
+
+
+    public ShareableLinkResponse generateShareableLink(String videoName) {
+        // Check if the video exists in the repository
+        Video video = videoRepository.findByVideoName(videoName)
+                .orElseThrow(() -> new NoSuchElementException("Video not found with the name: " + videoName));
+
+        // Generate a unique token
+        String token = UUID.randomUUID().toString();
+        Instant expiryTime = Instant.now().plus(1, ChronoUnit.MINUTES);
+
+        // Store token with expiry time (for validation later)
+        tokenStore.put(token, expiryTime);
+
+        // Create the shareable link
+        String shareableLink = "http://localhost:8080/video/access?token=" + token;
+
+        return new ShareableLinkResponse(shareableLink, expiryTime);
+    }
+
+    public String validateAccessToken(String token) {
+        // Check if the token exists and is still valid
+        Instant expiryTime = tokenStore.get(token);
+
+        if (expiryTime == null || Instant.now().isAfter(expiryTime)) {
+            throw new IllegalArgumentException("The link has expired or is invalid!");
+        }
+
+        return "The video is accessible via this temporary link.";
     }
 
 }

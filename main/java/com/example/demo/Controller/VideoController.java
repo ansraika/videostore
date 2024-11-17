@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Configuration.MergeRequest;
+import com.example.demo.Response.ShareableLinkResponse;
 import com.example.demo.Service.VideoService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @RestController
@@ -67,6 +68,27 @@ public class VideoController {
             log.error("Error merging videos", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error merging videos: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/generate-link")
+    public ResponseEntity<?> generateShareableLink(@RequestParam String videoName) {
+        try {
+            log.info("Generating sharable  link...");
+            ShareableLinkResponse response = videoService.generateShareableLink(videoName);
+            return ResponseEntity.ok(response);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/access-link")
+    public ResponseEntity<?> accessVideo(@RequestParam String token) {
+        try {
+            String result = videoService.validateAccessToken(token);
+            return ResponseEntity.ok(result);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.GONE).body(e.getMessage());
         }
     }
 
