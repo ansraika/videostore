@@ -1,28 +1,22 @@
 package com.example.demo.Configuration;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
+/**
+ * Represents a request to merge multiple videos into a single output video.
+ * <p>
+ * This class contains the list of video names that should be merged and the
+ * name of the output video. It is typically used when merging videos
+ * through the video service.
+ * </p>
+ */
+@Getter
+@Setter
 public class MergeRequest {
-    private List<String> videoNames;  // List of video names to merge
-    private String outputVideoName;   // Name of the merged video
 
-    public List<String> getVideoNames() {
-        return videoNames;
-    }
-
-    public void setVideoNames(List<String> videoNames) {
-        this.videoNames = videoNames;
-    }
-
-    public String getOutputVideoName() {
-        return outputVideoName;
-    }
-
-    public void setOutputVideoName(String outputVideoName) {
-        this.outputVideoName = outputVideoName;
-    }
-
-
-
-
+    private List<String> videoNames;
+    private String outputVideoName;
 }

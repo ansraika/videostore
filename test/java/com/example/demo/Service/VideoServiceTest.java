@@ -37,6 +37,8 @@ public class VideoServiceTest {
     @Value("${video.upload-dir}")
     private String uploadDir;
 
+    String videoPath = "/Users/anshitraika/Desktop/videoStreaming/src/main/resources/videostore/";
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -132,13 +134,13 @@ public class VideoServiceTest {
 
         Video video1 = new Video();
         video1.setVideoName("samplevideo.mp4");
-        video1.setVideoPath("/Users/anshitraika/Desktop/videoStreaming/src/main/resources/videostore/samplevideo.mp4");
+        video1.setVideoPath(videoPath+"samplevideo.mp4");
         video1.setLengthInSeconds(10);
         video1.setSizeInMB(10);
 
         Video video2 = new Video();
         video2.setVideoName("samplevideo2.mp4");
-        video2.setVideoPath("/Users/anshitraika/Desktop/videoStreaming/src/main/resources/videostore/samplevideo2.mp4");
+        video2.setVideoPath(videoPath+"samplevideo2.mp4");
         video2.setLengthInSeconds(20);
         video2.setSizeInMB(15);
 
