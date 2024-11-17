@@ -25,7 +25,7 @@ public class VideoService {
     private static final long MAX_SIZE_MB = 25; // max size of video in MB
     private static final int MIN_LENGTH_SEC = 1; // min video length in seconds
     private static final int MAX_LENGTH_SEC = 25; // max video length in seconds
-    private Map<String, Instant> tokenStore = new HashMap<>(); // Temporary in-memory store for tokens
+    Map<String, Instant> tokenStore = new HashMap<>(); // Temporary in-memory store for tokens
 
     @Value("${video.upload-dir}")
     private String uploadDir;
