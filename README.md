@@ -84,7 +84,7 @@ The project is a Spring Boot-based REST API designed to handle video file upload
 Clone the repository to your local machine using the following command:
 
 ```bash
-git clone https://github.com/your-username/video-management-api.git
+git clone https://github.com/ansraika/videostore.git  
 ```
 
 ### 2. Prerequisites
