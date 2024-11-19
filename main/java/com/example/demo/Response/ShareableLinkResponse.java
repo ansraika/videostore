@@ -13,19 +13,35 @@ import java.time.Instant;
  * when the link will no longer be valid.
  * </p>
  */
-@Getter
-@Setter
+
 public class ShareableLinkResponse {
 
     /**
      * The generated shareable link that provides access to a resource.
      */
     private String shareableLink;
-
     /**
      * The time when the shareable link will expire.
      */
     private Instant expiryTime;
+
+    public String getShareableLink() {
+        return shareableLink;
+    }
+
+    public void setShareableLink(String shareableLink) {
+        this.shareableLink = shareableLink;
+    }
+
+    public Instant getExpiryTime() {
+        return expiryTime;
+    }
+
+    public void setExpiryTime(Instant expiryTime) {
+        this.expiryTime = expiryTime;
+    }
+
+
 
     /**
      * Constructs a new {@link ShareableLinkResponse} with the provided shareable link and expiry time.

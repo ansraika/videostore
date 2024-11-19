@@ -5,7 +5,6 @@ import com.example.demo.Response.ShareableLinkResponse;
 import com.example.demo.Service.VideoService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,7 @@ import java.util.NoSuchElementException;
  * REST controller for handling video-related operations such as uploading, trimming,
  * merging, generating shareable links, and validating access tokens.
  */
-@Slf4j
+
 @RestController
 @RequestMapping("/api/videos")
 public class VideoController {
@@ -89,7 +88,6 @@ public class VideoController {
             videoService.mergeVideos(mergeRequest.getVideoNames(), mergeRequest.getOutputVideoName());
             return ResponseEntity.ok("Videos merged successfully.");
         } catch (IOException e) {
-            log.error("Error merging videos", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error merging videos: " + e.getMessage());
         }
@@ -104,7 +102,6 @@ public class VideoController {
     @GetMapping("/generate-link")
     public ResponseEntity<?> generateShareableLink(@RequestParam String videoName) {
         try {
-            log.info("Generating shareable link...");
             ShareableLinkResponse response = videoService.generateShareableLink(videoName);
             return ResponseEntity.ok(response);
         } catch (NoSuchElementException e) {

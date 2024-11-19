@@ -4,7 +4,6 @@ import com.example.demo.Entity.Video;
 import com.example.demo.Repository.VideoRepository;
 import com.example.demo.Response.ShareableLinkResponse;
 import org.springframework.beans.factory.annotation.Value;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,7 +14,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 
-@Slf4j
+
 @Service
 public class VideoService {
 
@@ -32,15 +31,12 @@ public class VideoService {
 
     public void uploadVideo(MultipartFile file, String videoName, int lengthInSeconds) throws IOException {
         // Validate file size
-        log.info("Uploading the video...");
         if (file.getSize() > MAX_SIZE_MB * 1024 * 1024) {
-            log.info("file size too large");
             throw new IllegalArgumentException("File size exceeds the maximum allowed size of 25MB");
         }
 
         // Validate video length
         if (lengthInSeconds < MIN_LENGTH_SEC || lengthInSeconds > MAX_LENGTH_SEC) {
-            log.info("file time is not between 1 to 25 seconds");
             throw new IllegalArgumentException("Video length must be between 5 and 15 seconds");
         }
 
@@ -95,7 +91,6 @@ public class VideoService {
             Process process = Runtime.getRuntime().exec(command);
             process.waitFor();  // Wait for the process to finish
         } catch (InterruptedException | IOException e) {
-            log.error("Error occurred while trimming the video", e);
             throw new IOException("Error occurred while trimming the video", e);
         }
 
@@ -147,7 +142,6 @@ public class VideoService {
             Process process = Runtime.getRuntime().exec(command);
             process.waitFor();  // Wait for the process to finish
         } catch (InterruptedException | IOException e) {
-            log.error("Error occurred while merging the videos", e);
             throw new IOException("Error occurred while merging the videos", e);
         } finally {
             // Delete the temporary file after use

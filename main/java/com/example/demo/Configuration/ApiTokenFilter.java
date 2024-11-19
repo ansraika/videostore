@@ -4,7 +4,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,7 +20,7 @@ import java.io.IOException;
  * missing, the filter responds with an HTTP 401 Unauthorized status.
  * </p>
  */
-@Slf4j
+
 @Component
 public class ApiTokenFilter extends OncePerRequestFilter {
 
@@ -51,10 +50,6 @@ public class ApiTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         // Retrieve the token from the Authorization header
         String token = request.getHeader("Authorization");
-
-        // Log the incoming token and the expected API token
-        log.info("Authorization Header: {}", token);
-        log.info("Expected API Token: {}", apiToken);
 
         // Validate the token
         if (token == null || !token.equals(apiToken)) {
